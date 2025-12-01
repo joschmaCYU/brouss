@@ -1,0 +1,3 @@
+/home/josch/brouss/build/CMakeFiles/brouss.dir
+/home/josch/brouss/build/CMakeFiles/edit_cache.dir
+/home/josch/brouss/build/CMakeFiles/rebuild_cache.dir
