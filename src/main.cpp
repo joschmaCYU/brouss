@@ -1,6 +1,7 @@
 #include "../src/include/tokenization.hpp"
+#include "../src/include/parser.hpp"
+#include "../src/include/generation.hpp"
 
-#include <algorithm>
 #include <cctype>
 #include <cstdlib>
 #include <iostream>
@@ -9,7 +10,9 @@
 #include <ostream>
 #include <sstream>
 #include <string>
+#include <utility>
 #include <vector>
+
 std::string token_type_to_string(TokenType type) {
     switch (type) {
         case TokenType::exit:    return "EXIT";
@@ -17,25 +20,6 @@ std::string token_type_to_string(TokenType type) {
         case TokenType::semi:    return "SEMI";
     }
     return "UNKNOWN";
-}
-std::string tokens_to_asm(const std::vector<Token>& tokens) {
-  std::stringstream output;
-  output << "global _start\n_start:\n";
-
-  for (int i =0; i < tokens.size(); i++) {
-    const Token& token = tokens.at(i);
-
-    if (token.type == TokenType::exit) {
-      if (i+1 < tokens.size() && tokens.at(i+1).type == TokenType::int_lit) {
-        if (i+2 < tokens.size() && tokens.at(i+2).type == TokenType::semi) {
-          output << "    mov rax, 60\n";
-          output << "    mov rdi, " << tokens.at(i+1).value.value() << "\n";
-          output << "    syscall";
-        }
-      }
-    }
-  }
-  return output.str();
 }
 
 int main(int argc, char* argv[]) {
@@ -53,18 +37,32 @@ int main(int argc, char* argv[]) {
     contents = contents_stream.str();
   }
 
+  //std::cout << contents << std::endl;
+
   Tokenizer tokenizer(std::move(contents));
   std::vector<Token> tokens = tokenizer.tokenize();
-  {
-    std::fstream file("out.asm", std::ios::out);
-    file << tokens_to_asm(tokens);
-  }
-
+  //std::cout << tokens.size() << std::endl;
   for (const Token& token : tokens) {
     std::cout << "Type: " << token_type_to_string(token.type) << '\n';
   }
 
+  Parser parser(std::move(tokens));
+  std::optional<NodeExit> tree = parser.parse();
+  std::cout << tree.has_value() << std::endl;
+
   
+
+  if (!tree.has_value()) {
+    std::cerr << "No exit statement found" << std::endl;
+    exit(EXIT_FAILURE);
+  }
+
+  Generator generator(tree.value());
+  {
+    std::fstream file("out.asm", std::ios::out);
+    file << generator.generate();
+  }
+
   system("nasm -felf64 out.asm");
   system("ld -o out out.o");
   
