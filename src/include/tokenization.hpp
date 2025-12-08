@@ -3,7 +3,7 @@
 #include <cctype>
 #include <cstdlib>
 #include <iostream>
-#include <optional>
+#include <optional> 
 #include <ostream>
 #include <string>
 #include <vector>
@@ -11,7 +11,10 @@
 enum class TokenType {
   exit,
   int_lit,
-  semi
+  semi,
+  open_paren,
+  close_paren,
+  ident,
 };
 
 struct Token {
@@ -42,8 +45,9 @@ public:
           tokens.push_back({.type = TokenType::exit});
           buf.clear();
         } else {
-          std::cerr << "Not good" << std::endl;
-          exit(EXIT_FAILURE);
+          tokens.push_back({.type = TokenType::ident, .value = buf});
+          buf.clear();
+          continue;
         }
           
       } else if (std::isdigit(peek().value())) {
@@ -54,10 +58,19 @@ public:
         }
         tokens.push_back({.type = TokenType::int_lit, .value = buf});
         buf.clear();
-        continue;
-      } else if (peek().value() == '\n') {
+        continue; 
+      } else if (peek().value() == '(') {
         consume();
-        tokens.push_back({ TokenType::semi });
+        tokens.push_back({ .type = TokenType::open_paren });
+        continue;
+      } else if (peek().value() == ')') {
+        consume();
+        tokens.push_back({ .type = TokenType::close_paren });
+        continue;
+      }
+      else if (peek().value() == '\n') {
+        consume();
+        tokens.push_back({.type = TokenType::semi });
         continue;
       } else if (std::isspace(peek().value())) {
         consume();
@@ -73,11 +86,11 @@ public:
   }
 
 private:
-  [[nodiscard]] inline std::optional<char> peek(int ahead = 1) const {
-    if (m_index + ahead > m_src.size()) {
+  [[nodiscard]] inline std::optional<char> peek(int offset = 0) const {
+    if (m_index + offset >= m_src.size()) {
       return {};
     } else {
-      return m_src.at(m_index);
+      return m_src.at(m_index + offset);
     }
   }
 

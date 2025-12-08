@@ -8,38 +8,9 @@
 #include <ostream>
 #include <utility>
 #include <vector>
-#include <variant>
-
-struct NodeExprIntLit {
-  Token int_lit;
-};
-
-struct NodeExprIdent {
-  Token ident;
-};
 
 struct NodeExpr {
-  std::variant<NodeExprIntLit, NodeExprIdent> var;
-};
-
-struct NodeStatementExit {
-  NodeExpr expr;
-};
-
-struct NodeStatementLet {
-  Token ident;
-  NodeExpr expr;
-};
-struct NodeStatement {
-  std::variant<NodeStatementExit, NodeStatementLet> var;
-};
-
-struct NodeProg {
-  std::vector<NodeStatement> stmts;
-};
-
-struct NodeProgram {
-  std::vector<NodeStatement> stmts;
+  Token int_lit;
 };
 
 struct NodeExit {
@@ -54,9 +25,7 @@ public:
   }
   std::optional<NodeExpr> parse_expr() {
     if (peek().has_value() && peek().value().type == TokenType::int_lit) {
-      return NodeExpr{.var = NodeExprIntLit { .int_lit = consume() }};
-    } else if (peek().has_value() && peek().value().type == TokenType::ident) {
-      return NodeExpr { .var = NodeExprIdent { .ident = consume()}};
+      return NodeExpr{.int_lit = consume()};
     } else {
       return {};
     }

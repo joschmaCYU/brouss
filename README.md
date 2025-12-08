@@ -4,8 +4,15 @@ This simple compiler is very inspired by [this](https://www.youtube.com/watch?v=
 Here is my parse tree
 $$
 \begin{align}
-    [\text{exit}] &\to exit ([\text{expr}])
-    \\
-    [\text{expr}] &\to \text{int\_lit}
+    [\text{prog}] &\to [\text {statment}]^* \\
+    [\text{statment}] &\to 
+    \begin{cases}
+      exit([\text{expr}]) \\
+      let\space\text{indent} = [\text{expr}]
+    \end{cases} \\
+    \begin{cases}
+      \text{expr} \\
+      \text{int\_lit}
+    \end{cases}
 \end{align}
 $$

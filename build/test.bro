@@ -1,1 +1,2 @@
-exit 100
+let x = 7
+exit(x)
