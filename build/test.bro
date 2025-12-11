@@ -1,2 +1,2 @@
-let x = 7
+int x = 7
 exit(x)
