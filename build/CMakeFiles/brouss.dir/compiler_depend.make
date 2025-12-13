@@ -24,6 +24,7 @@ CMakeFiles/brouss.dir/src/main.cpp.o: /home/josch/brouss/src/main.cpp \
   /usr/include/c++/13/bits/cxxabi_forced.h \
   /usr/include/c++/13/bits/cxxabi_init_exception.h \
   /usr/include/c++/13/bits/enable_special_members.h \
+  /usr/include/c++/13/bits/erase_if.h \
   /usr/include/c++/13/bits/exception.h \
   /usr/include/c++/13/bits/exception_defines.h \
   /usr/include/c++/13/bits/exception_ptr.h \
@@ -31,19 +32,24 @@ CMakeFiles/brouss.dir/src/main.cpp.o: /home/josch/brouss/src/main.cpp \
   /usr/include/c++/13/bits/functexcept.h \
   /usr/include/c++/13/bits/functional_hash.h \
   /usr/include/c++/13/bits/hash_bytes.h \
+  /usr/include/c++/13/bits/hashtable.h \
+  /usr/include/c++/13/bits/hashtable_policy.h \
   /usr/include/c++/13/bits/invoke.h \
   /usr/include/c++/13/bits/ios_base.h \
   /usr/include/c++/13/bits/istream.tcc \
+  /usr/include/c++/13/bits/iterator_concepts.h \
   /usr/include/c++/13/bits/locale_classes.h \
   /usr/include/c++/13/bits/locale_classes.tcc \
   /usr/include/c++/13/bits/locale_facets.h \
   /usr/include/c++/13/bits/locale_facets.tcc \
   /usr/include/c++/13/bits/localefwd.h \
+  /usr/include/c++/13/bits/max_size_type.h \
   /usr/include/c++/13/bits/memory_resource.h \
   /usr/include/c++/13/bits/memoryfwd.h \
   /usr/include/c++/13/bits/move.h \
   /usr/include/c++/13/bits/nested_exception.h \
   /usr/include/c++/13/bits/new_allocator.h \
+  /usr/include/c++/13/bits/node_handle.h \
   /usr/include/c++/13/bits/ostream.tcc \
   /usr/include/c++/13/bits/ostream_insert.h \
   /usr/include/c++/13/bits/parse_numbers.h \
@@ -51,6 +57,9 @@ CMakeFiles/brouss.dir/src/main.cpp.o: /home/josch/brouss/src/main.cpp \
   /usr/include/c++/13/bits/predefined_ops.h \
   /usr/include/c++/13/bits/ptr_traits.h \
   /usr/include/c++/13/bits/range_access.h \
+  /usr/include/c++/13/bits/ranges_base.h \
+  /usr/include/c++/13/bits/ranges_cmp.h \
+  /usr/include/c++/13/bits/ranges_util.h \
   /usr/include/c++/13/bits/refwrap.h \
   /usr/include/c++/13/bits/requires_hosted.h \
   /usr/include/c++/13/bits/sstream.tcc \
@@ -70,6 +79,7 @@ CMakeFiles/brouss.dir/src/main.cpp.o: /home/josch/brouss/src/main.cpp \
   /usr/include/c++/13/bits/streambuf_iterator.h \
   /usr/include/c++/13/bits/string_view.tcc \
   /usr/include/c++/13/bits/stringfwd.h \
+  /usr/include/c++/13/bits/unordered_map.h \
   /usr/include/c++/13/bits/uses_allocator.h \
   /usr/include/c++/13/bits/uses_allocator_args.h \
   /usr/include/c++/13/bits/utility.h \
@@ -77,6 +87,8 @@ CMakeFiles/brouss.dir/src/main.cpp.o: /home/josch/brouss/src/main.cpp \
   /usr/include/c++/13/cctype \
   /usr/include/c++/13/cerrno \
   /usr/include/c++/13/clocale \
+  /usr/include/c++/13/compare \
+  /usr/include/c++/13/concepts \
   /usr/include/c++/13/cstddef \
   /usr/include/c++/13/cstdio \
   /usr/include/c++/13/cstdlib \
@@ -98,6 +110,7 @@ CMakeFiles/brouss.dir/src/main.cpp.o: /home/josch/brouss/src/main.cpp \
   /usr/include/c++/13/iostream \
   /usr/include/c++/13/istream \
   /usr/include/c++/13/new \
+  /usr/include/c++/13/numbers \
   /usr/include/c++/13/optional \
   /usr/include/c++/13/ostream \
   /usr/include/c++/13/pstl/pstl_config.h \
@@ -110,6 +123,7 @@ CMakeFiles/brouss.dir/src/main.cpp.o: /home/josch/brouss/src/main.cpp \
   /usr/include/c++/13/tuple \
   /usr/include/c++/13/type_traits \
   /usr/include/c++/13/typeinfo \
+  /usr/include/c++/13/unordered_map \
   /usr/include/c++/13/utility \
   /usr/include/c++/13/variant \
   /usr/include/c++/13/vector \
@@ -247,8 +261,6 @@ CMakeFiles/brouss.dir/src/main.cpp.o: /home/josch/brouss/src/main.cpp \
 
 /usr/include/x86_64-linux-gnu/bits/types/struct_tm.h:
 
-/usr/include/x86_64-linux-gnu/bits/types/struct_sched_param.h:
-
 /usr/include/x86_64-linux-gnu/bits/types/struct___jmp_buf_tag.h:
 
 /usr/include/x86_64-linux-gnu/bits/wctype-wchar.h:
@@ -297,12 +309,6 @@ CMakeFiles/brouss.dir/src/main.cpp.o: /home/josch/brouss/src/main.cpp \
 
 /usr/include/x86_64-linux-gnu/bits/locale.h:
 
-/usr/include/x86_64-linux-gnu/c++/13/bits/c++allocator.h:
-
-/usr/include/x86_64-linux-gnu/bits/types/struct_itimerspec.h:
-
-/usr/include/x86_64-linux-gnu/bits/floatn.h:
-
 /usr/include/x86_64-linux-gnu/bits/types/wint_t.h:
 
 /usr/include/x86_64-linux-gnu/bits/floatn-common.h:
@@ -321,23 +327,41 @@ CMakeFiles/brouss.dir/src/main.cpp.o: /home/josch/brouss/src/main.cpp \
 
 /usr/include/x86_64-linux-gnu/asm/errno.h:
 
-/usr/include/c++/13/bits/stl_construct.h:
+/usr/include/stdlib.h:
 
-/usr/include/c++/13/cstdlib:
+/usr/include/stdio.h:
 
-/usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h:
+/usr/include/sched.h:
 
-/usr/include/c++/13/bits/refwrap.h:
+/usr/include/pthread.h:
 
-/usr/include/c++/13/bits/fstream.tcc:
+/usr/include/x86_64-linux-gnu/bits/pthread_stack_min-dynamic.h:
+
+/usr/include/linux/errno.h:
+
+/usr/include/features.h:
 
 /usr/include/c++/13/debug/debug.h:
 
 /usr/include/c++/13/stdexcept:
 
-/usr/include/c++/13/bits/ostream_insert.h:
-
 /usr/include/c++/13/bits/parse_numbers.h:
+
+/usr/include/time.h:
+
+/usr/include/c++/13/bits/memoryfwd.h:
+
+/usr/include/c++/13/bits/erase_if.h:
+
+/usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h:
+
+/usr/include/c++/13/cstddef:
+
+/usr/include/c++/13/vector:
+
+/usr/include/wchar.h:
+
+/usr/include/c++/13/bits/memory_resource.h:
 
 /home/josch/brouss/src/include/generation.hpp:
 
@@ -347,19 +371,37 @@ CMakeFiles/brouss.dir/src/main.cpp.o: /home/josch/brouss/src/main.cpp \
 
 /usr/include/ctype.h:
 
-/usr/include/x86_64-linux-gnu/bits/types/clock_t.h:
-
-/usr/include/c++/13/bits/char_traits.h:
-
-/usr/include/c++/13/bits/ostream.tcc:
-
 /usr/include/x86_64-linux-gnu/c++/13/bits/c++config.h:
 
 /usr/include/c++/13/bits/ios_base.h:
 
+/usr/include/c++/13/bits/ostream_insert.h:
+
+/usr/include/c++/13/bits/hashtable.h:
+
 /usr/include/c++/13/bits/hash_bytes.h:
 
+/usr/include/c++/13/bits/ranges_util.h:
+
 /usr/include/asm-generic/errno-base.h:
+
+/usr/include/features-time64.h:
+
+/usr/include/c++/13/string_view:
+
+/usr/include/x86_64-linux-gnu/bits/types/clock_t.h:
+
+/usr/include/c++/13/bits/char_traits.h:
+
+/usr/include/c++/13/bits/hashtable_policy.h:
+
+/usr/include/x86_64-linux-gnu/bits/uintn-identity.h:
+
+/usr/include/x86_64-linux-gnu/bits/stdlib-float.h:
+
+/usr/include/c++/13/streambuf:
+
+/usr/include/c++/13/bits/exception.h:
 
 /usr/include/x86_64-linux-gnu/c++/13/bits/gthr.h:
 
@@ -367,19 +409,11 @@ CMakeFiles/brouss.dir/src/main.cpp.o: /home/josch/brouss/src/main.cpp \
 
 /usr/include/c++/13/bits/nested_exception.h:
 
-/usr/include/c++/13/bits/memory_resource.h:
-
-/usr/include/wchar.h:
-
 /usr/include/x86_64-linux-gnu/bits/time64.h:
 
 /usr/include/c++/13/bits/basic_ios.h:
 
 /usr/include/c++/13/bits/locale_classes.tcc:
-
-/usr/include/c++/13/bits/stl_bvector.h:
-
-/usr/include/c++/13/bits/allocator.h:
 
 /usr/include/c++/13/sstream:
 
@@ -387,23 +421,15 @@ CMakeFiles/brouss.dir/src/main.cpp.o: /home/josch/brouss/src/main.cpp \
 
 /usr/include/c++/13/bits/stl_vector.h:
 
-/usr/include/c++/13/bits/locale_facets.tcc:
-
-/usr/include/c++/13/bits/requires_hosted.h:
-
-/usr/include/c++/13/bits/string_view.tcc:
-
-/usr/include/features.h:
-
 /usr/include/c++/13/backward/binders.h:
 
 /usr/include/c++/13/bits/stringfwd.h:
 
+/usr/include/c++/13/bits/iterator_concepts.h:
+
 /home/josch/brouss/src/include/parser.hpp:
 
 /usr/include/alloca.h:
-
-/usr/include/c++/13/bits/move.h:
 
 /usr/include/c++/13/bits/basic_string.tcc:
 
@@ -415,17 +441,25 @@ CMakeFiles/brouss.dir/src/main.cpp.o: /home/josch/brouss/src/main.cpp \
 
 /usr/include/c++/13/bits/enable_special_members.h:
 
-/usr/include/c++/13/bits/sstream.tcc:
-
-/usr/include/c++/13/cwctype:
-
 /usr/include/c++/13/bits/predefined_ops.h:
+
+/usr/include/c++/13/bits/ranges_cmp.h:
 
 /usr/include/c++/13/iosfwd:
 
 /usr/include/c++/13/cwchar:
 
-/usr/include/c++/13/bits/stl_algobase.h:
+/usr/include/c++/13/bits/node_handle.h:
+
+/usr/include/c++/13/ios:
+
+/usr/include/stdc-predef.h:
+
+/home/josch/brouss/src/include/tokenization.hpp:
+
+/usr/include/errno.h:
+
+/usr/include/c++/13/bits/functional_hash.h:
 
 /home/josch/brouss/src/main.cpp:
 
@@ -433,13 +467,17 @@ CMakeFiles/brouss.dir/src/main.cpp.o: /home/josch/brouss/src/main.cpp \
 
 /usr/include/c++/13/bits/stl_iterator_base_funcs.h:
 
+/usr/include/x86_64-linux-gnu/bits/types/struct_sched_param.h:
+
+/usr/include/c++/13/compare:
+
+/usr/include/c++/13/bits/ranges_base.h:
+
+/usr/include/c++/13/istream:
+
 /usr/include/x86_64-linux-gnu/bits/endianness.h:
 
 /usr/include/c++/13/bits/basic_string.h:
-
-/home/josch/brouss/src/include/tokenization.hpp:
-
-/usr/include/stdc-predef.h:
 
 /usr/include/x86_64-linux-gnu/c++/13/bits/os_defines.h:
 
@@ -447,15 +485,19 @@ CMakeFiles/brouss.dir/src/main.cpp.o: /home/josch/brouss/src/main.cpp \
 
 /usr/include/c++/13/bits/ptr_traits.h:
 
+/usr/include/c++/13/bits/fstream.tcc:
+
+/usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h:
+
+/usr/include/c++/13/bits/refwrap.h:
+
 /usr/include/c++/13/bits/localefwd.h:
 
 /usr/include/c++/13/bits/exception_defines.h:
 
 /usr/include/c++/13/bits/locale_facets.h:
 
-/usr/include/c++/13/bits/memoryfwd.h:
-
-/usr/include/time.h:
+/usr/include/c++/13/bits/move.h:
 
 /usr/include/x86_64-linux-gnu/bits/types.h:
 
@@ -465,15 +507,9 @@ CMakeFiles/brouss.dir/src/main.cpp.o: /home/josch/brouss/src/main.cpp \
 
 /usr/include/c++/13/bits/cxxabi_forced.h:
 
-/usr/include/c++/13/string:
+/usr/include/x86_64-linux-gnu/bits/types/mbstate_t.h:
 
-/usr/include/x86_64-linux-gnu/bits/uintn-identity.h:
-
-/usr/include/x86_64-linux-gnu/bits/stdlib-float.h:
-
-/usr/include/c++/13/streambuf:
-
-/usr/include/c++/13/bits/exception.h:
+/usr/include/c++/13/cerrno:
 
 /usr/include/c++/13/bits/concept_check.h:
 
@@ -483,13 +519,37 @@ CMakeFiles/brouss.dir/src/main.cpp.o: /home/josch/brouss/src/main.cpp \
 
 /usr/include/c++/13/ext/alloc_traits.h:
 
-/usr/include/x86_64-linux-gnu/bits/libc-header-start.h:
+/usr/include/c++/13/bits/locale_facets.tcc:
 
-/usr/include/c++/13/bits/stl_iterator.h:
+/usr/include/c++/13/bits/requires_hosted.h:
+
+/usr/include/c++/13/bits/string_view.tcc:
+
+/usr/include/c++/13/cwctype:
+
+/usr/include/c++/13/bits/sstream.tcc:
+
+/usr/include/c++/13/cstdlib:
+
+/usr/include/c++/13/bits/stl_algobase.h:
+
+/usr/include/c++/13/bits/allocator.h:
+
+/usr/include/c++/13/bits/stl_bvector.h:
+
+/usr/include/c++/13/bits/stl_construct.h:
+
+/usr/include/x86_64-linux-gnu/bits/libc-header-start.h:
 
 /usr/include/c++/13/bits/functexcept.h:
 
-/usr/include/c++/13/ios:
+/usr/include/c++/13/bits/stl_iterator.h:
+
+/usr/include/c++/13/bits/ostream.tcc:
+
+/usr/include/c++/13/numbers:
+
+/usr/include/c++/13/string:
 
 /usr/include/c++/13/bits/stl_iterator_base_types.h:
 
@@ -499,17 +559,31 @@ CMakeFiles/brouss.dir/src/main.cpp.o: /home/josch/brouss/src/main.cpp \
 
 /usr/include/c++/13/bits/stl_uninitialized.h:
 
+/usr/include/c++/13/bits/unordered_map.h:
+
+/usr/include/endian.h:
+
+/usr/include/c++/13/bits/max_size_type.h:
+
+/usr/include/c++/13/bits/streambuf.tcc:
+
 /usr/include/c++/13/bits/istream.tcc:
 
 /usr/include/c++/13/bits/exception_ptr.h:
 
 /usr/include/c++/13/optional:
 
-/usr/include/c++/13/bits/std_abs.h:
-
 /usr/include/c++/13/bits/postypes.h:
 
+/usr/include/c++/13/bits/std_abs.h:
+
 /usr/include/c++/13/bits/uses_allocator.h:
+
+/usr/include/x86_64-linux-gnu/bits/errno.h:
+
+/usr/include/wctype.h:
+
+/usr/include/c++/13/exception:
 
 /usr/include/x86_64-linux-gnu/bits/long-double.h:
 
@@ -521,25 +595,25 @@ CMakeFiles/brouss.dir/src/main.cpp.o: /home/josch/brouss/src/main.cpp \
 
 /usr/include/c++/13/bits/utility.h:
 
-/usr/include/x86_64-linux-gnu/bits/types/mbstate_t.h:
-
-/usr/include/c++/13/cerrno:
-
-/usr/include/stdio.h:
-
 /usr/include/c++/13/clocale:
 
-/usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h:
+/usr/include/x86_64-linux-gnu/c++/13/bits/c++allocator.h:
 
-/usr/include/c++/13/cstddef:
+/usr/include/x86_64-linux-gnu/bits/types/struct_itimerspec.h:
 
-/usr/include/c++/13/vector:
+/usr/include/x86_64-linux-gnu/bits/floatn.h:
+
+/usr/include/c++/13/concepts:
+
+/usr/include/x86_64-linux-gnu/bits/types/sigset_t.h:
+
+/usr/include/c++/13/ext/numeric_traits.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h:
 
-/usr/include/c++/13/bits/charconv.h:
-
 /usr/include/c++/13/bits/stl_pair.h:
+
+/usr/include/c++/13/bits/charconv.h:
 
 /usr/include/c++/13/fstream:
 
@@ -551,17 +625,15 @@ CMakeFiles/brouss.dir/src/main.cpp.o: /home/josch/brouss/src/main.cpp \
 
 /usr/include/c++/13/tuple:
 
-/usr/include/c++/13/bits/functional_hash.h:
+/usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h:
 
-/usr/include/errno.h:
+/usr/include/locale.h:
+
+/usr/include/c++/13/ext/aligned_buffer.h:
 
 /usr/include/c++/13/cctype:
 
 /usr/include/c++/13/ext/atomicity.h:
-
-/usr/include/x86_64-linux-gnu/bits/types/sigset_t.h:
-
-/usr/include/c++/13/ext/numeric_traits.h:
 
 /usr/include/c++/13/ext/string_conversions.h:
 
@@ -570,12 +642,6 @@ CMakeFiles/brouss.dir/src/main.cpp.o: /home/josch/brouss/src/main.cpp \
 /usr/include/c++/13/iostream:
 
 /usr/include/c++/13/initializer_list:
-
-/usr/include/c++/13/istream:
-
-/usr/include/c++/13/string_view:
-
-/usr/include/features-time64.h:
 
 /usr/include/c++/13/bits/streambuf_iterator.h:
 
@@ -595,34 +661,10 @@ CMakeFiles/brouss.dir/src/main.cpp.o: /home/josch/brouss/src/main.cpp \
 
 /usr/include/c++/13/typeinfo:
 
+/usr/include/c++/13/unordered_map:
+
 /usr/include/c++/13/utility:
 
 /usr/include/c++/13/bits/vector.tcc:
 
 /usr/include/c++/13/variant:
-
-/usr/include/c++/13/bits/streambuf.tcc:
-
-/usr/include/endian.h:
-
-/usr/include/x86_64-linux-gnu/bits/pthread_stack_min-dynamic.h:
-
-/usr/include/linux/errno.h:
-
-/usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h:
-
-/usr/include/c++/13/ext/aligned_buffer.h:
-
-/usr/include/locale.h:
-
-/usr/include/pthread.h:
-
-/usr/include/sched.h:
-
-/usr/include/stdlib.h:
-
-/usr/include/x86_64-linux-gnu/bits/errno.h:
-
-/usr/include/c++/13/exception:
-
-/usr/include/wctype.h:
