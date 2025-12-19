@@ -1,10 +1,2 @@
-int x = 5
-int y = 9
-bool me = true
-bool notme = false
-string name = "Joschka"
-char c = 'c'
-float num = 123.4
-return(10)
-print("test")
+int x = 8 + 1
 exit(x)
