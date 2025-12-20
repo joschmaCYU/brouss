@@ -4,6 +4,12 @@ _start:
     push rax
     mov rax, 1
     push rax
+    mov rax, 10
+    push rax
+    pop rax
+    pop rbx
+    add rax, rbx
+    push rax
     pop rax
     pop rbx
     add rax, rbx
