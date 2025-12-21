@@ -2,13 +2,13 @@ global _start
 _start:
     mov rax, 8
     push rax
-    mov rax, 1
+    mov rax, 2
     push rax
-    mov rax, 10
+    mov rax, 2
     push rax
     pop rax
     pop rbx
-    add rax, rbx
+    mul rbx
     push rax
     pop rax
     pop rbx

@@ -1,2 +1,2 @@
-int x = 8 + 1 + 10
+int x = 8 + 2 * 2
 exit(x)
