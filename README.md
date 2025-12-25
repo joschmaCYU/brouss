@@ -3,39 +3,54 @@ This simple compiler is very inspired by [this](https://www.youtube.com/watch?v=
 
 The compiler generates assembly, which gets assembled in an executable by nasm
 
-Here is my parse tree:  
-  
+## Example of brouss :
+```
+// This is a comment
+int x = 1 * 3 - 6 / 2
+
+if (x) {
+  exit(20)
+} elif (1) {
+  exit(1)
+} else {
+  exit(0)
+}
+``` 
+
+ ## Parse tree:  
+
 $$
-\begin{align}
-    [\text{prog}] &\to [\text {Statment}]^* \\
-    [\text{Statment}] &\to 
+\begin{aligned}
+    [\text{Prog}] &\to [\text{Stmt}]^* \\
+    [\text{Statement}] &\to 
     \begin{cases}
         \text{exit}([\text{Expr}]) \\
-        \text{TYPE}\space\text{indent} = [\text{Expr}]
-        \text{if} ([\text{Expr}])[\text{Scope}]\\
+        \text{TYPE}\ \text{ident} = [\text{Expr}] \\
+        \text{if } ([\text{Expr}]) [\text{Scope}] \\
         [\text{Scope}]
     \end{cases} \\
     [\text{Scope}] &\to
     \begin{cases}
-        \{[\text{Statment}]^*} \\
-    \end{cases}
+        \{ [\text{Statement}]^* \}
+    \end{cases} \\
     [\text{Expr}] &\to
     \begin{cases}
         [\text{Term}] \\
-        [\text{NodeBinExp}] \\
+        [\text{BinExpr}]
     \end{cases} \\
     [\text{BinExpr}] &\to
-    \begin{cases} \\
+    \begin{cases} 
         [\text{Expr}] * [\text{expr}] & \text{priority} = 1 \\
         [\text{Expr}] / [\text{expr}] & \text{priority} = 1 \\
         [\text{Expr}] + [\text{expr}] & \text{priority} = 0 \\
-        [\text{Expr}] - [\text{expr}] & \text{priority} = 0 \\
+        [\text{Expr}] - [\text{expr}] & \text{priority} = 0 
     \end{cases} \\
     [\text{Term}] &\to
     \begin{cases}
-        \text{int\_lit} \\
+        \texttt{int\\_lit} \\
         \text{ident} \\
-        ([\text{Expr}]) \\
-    \end{cases} \\
-\end{align}
+        ([\text{Expr}])
+    \end{cases}
+\end{aligned}
 $$
+
