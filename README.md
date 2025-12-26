@@ -66,12 +66,12 @@ $$
     [\text{Prog}] &\to [\text{Stmt}]^* \\
     [\text{Statement}] &\to 
     \begin{cases}
-        	text{exit}([\text{Expr}]) \\
-        	text{TYPE}\ \text{ident} = [\text{Expr}] \\
-        	text{ident} = [\text{Expr}] \\
-        	text{print}([\text{Expr}]) \\
-        	text{if } ([\text{Expr}]) [\text{Scope}] \\
-        	text{while } ([\text{Expr}]) [\text{Scope}] \\
+        	\text{exit}([\text{Expr}]) \\
+        	\text{TYPE}\ \text{ident} = [\text{Expr}] \\
+        	\text{ident} = [\text{Expr}] \\
+        	\text{print}([\text{Expr}]) \\
+        	\text{if } ([\text{Expr}]) [\text{Scope}] \\
+        	\text{while } ([\text{Expr}]) [\text{Scope}] \\
         [\text{Scope}]
     \end{cases} \\
     [\text{Scope}] &\to \{ [\text{Statement}]^* \} \\
