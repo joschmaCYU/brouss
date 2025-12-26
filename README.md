@@ -8,6 +8,9 @@ The compiler generates assembly, which gets assembled in an executable by nasm
 // This is a comment
 int x = 1 * 3 - 6 / 2
 
+string str = "Hello World!"
+print(str)
+
 if (x) {
   exit(20)
 } elif (1) {
