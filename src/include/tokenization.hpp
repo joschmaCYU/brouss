@@ -1,16 +1,18 @@
 #pragma once
 
 #include <cctype>
+#include <cstdint>
 #include <cstdlib>
+#include <cstring>
+#include <iomanip>
 #include <iostream>
 #include <optional> 
 #include <ostream>
 #include <string>
+#include <strstream>
 #include <vector>
 
 // (LEXER) File to identify the "token" and give it a type
-
-
 
 enum class TokenType {
   exit,
@@ -153,6 +155,7 @@ public:
           }
           int second = std::stoi(buf);
           std::string float_str = std::to_string(first) + "." + std::to_string(second);
+
           tokens.push_back({.type = TokenType::float_lit, .value = float_str});
         } else {
           tokens.push_back({.type = TokenType::int_lit, .value = buf});

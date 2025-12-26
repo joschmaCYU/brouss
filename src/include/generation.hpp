@@ -1,9 +1,11 @@
 # pragma once
+
 #include "./parser.hpp"
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
 #include <cstdlib>
+#include <cstring>
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -11,8 +13,6 @@
 #include <vector>
 
 // File to generate the asmebly code
-
-
 
 class Generator {
 public:
@@ -25,9 +25,20 @@ public:
     struct TermVisitor {
       Generator& gen;
 
-      void operator()(const NodeTermIntLit* term_int_lit) const {
-        gen.m_output << "    mov rax, " << term_int_lit->int_lit.value.value() << "\n";
-        gen.push("rax");
+      void operator()(const NodeTermNumber* term_number) const {
+        if (term_number->number.type == TokenType::int_lit) {
+            gen.m_output << "    mov rax, " << term_number->number.value.value() << "\n";
+            gen.push("rax");
+        } else if (term_number->number.type == TokenType::float_lit) {
+            float my_float = std::stof(term_number->number.value.value());
+            std::uint32_t hex_rep;
+            std::memcpy(&hex_rep, &my_float, sizeof(float));
+
+            gen.m_output << "    mov eax, " << "0x" << std::hex << std::uppercase << std::setw(8) << std::setfill('0') << hex_rep << "\n"; // Load the bits into an integer register
+            gen.m_output << "    movd xmm0, eax\n"; //Move the raw bits into xmm0
+
+            gen.push("rax");
+        }
       }
 
       void operator()(const NodeTermIdent* term_ident) const {
@@ -38,14 +49,35 @@ public:
           std::cerr << "Undeclared identifier: " << term_ident->ident.value.value() << "\n";
           exit(EXIT_FAILURE);
         }
-        std::stringstream offset;
-        offset << "QWORD [rsp + " << (gen.m_stack_size - it->stack_loc - 1) * 8 << "]";
-
-        gen.push(offset.str());
+        // Strings occupy two slots: len at stack_loc, ptr at stack_loc+1
+        if (it->type == VarType::String) {
+          std::stringstream off_len;
+          off_len << "QWORD [rsp + " << (gen.m_stack_size - it->stack_loc - 1) * 8 << "]";
+          gen.push(off_len.str());
+          std::stringstream off_ptr;
+          off_ptr << "QWORD [rsp + " << (gen.m_stack_size - (it->stack_loc + 1) - 1) * 8 << "]";
+          gen.push(off_ptr.str());
+        } else {
+          std::stringstream offset;
+          offset << "QWORD [rsp + " << (gen.m_stack_size - it->stack_loc - 1) * 8 << "]";
+          gen.push(offset.str());
+        }
       }
 
       void operator()(const NodeTermParen* term_paren) {
         gen.gen_expr(term_paren->expr);
+      }
+
+      void operator()(const NodeTermString* term_string) {
+        const std::string label = gen.create_str_label();
+        // Emit data for this string literal
+        gen.m_data_output << "    " << label << "_len dq " << term_string->string.value.value().length() << "\n";
+        gen.m_data_output << "    " << label << " db \"" << term_string->string.value.value() << "\"\n";
+        // Push length then pointer so print can pop rsi, rdx
+        gen.m_output << "    mov rax, " << term_string->string.value.value().length() << "\n";
+        gen.push("rax");
+        gen.m_output << "    lea rax, [rel " << label << "]\n";
+        gen.push("rax");
       }
     };
 
@@ -96,6 +128,7 @@ public:
     BinExprVisitor visitor = {.gen = *this};
     std::visit(visitor, bin_expr->var);
   }
+
   void gen_expr(const NodeExpr* expr) {
     struct ExprVisitor {
       Generator& gen;
@@ -156,17 +189,53 @@ public:
         gen.m_output << "    syscall\n";
       }
 
+      void operator()(const NodeStatementString* stmt_string) {
+        auto it = std::find_if(gen.m_vars.cbegin(), gen.m_vars.cend(), [&](const Var& var) {
+          return var.name == stmt_string->ident.value.value();
+        });
+        if (it != gen.m_vars.cend()) {
+          std::cerr << "Redeclared identifier: " << stmt_string->ident.value.value() << "\n";
+          exit(EXIT_FAILURE);
+        }
+        gen.m_vars.push_back({ .name = stmt_string->ident.value.value(), .stack_loc = gen.m_stack_size, .type = VarType::String });
+        gen.gen_expr(stmt_string->expr);
+      }
+
+      void operator()(const NodeStatementPrint* stmt_print) const {
+        // Evaluate expression: for strings we expect [len, ptr] pushed (ptr on top)
+        gen.gen_expr(stmt_print->expr);
+        gen.pop("rsi"); // ptr
+        gen.pop("rdx"); // len
+        gen.m_output << "    mov rax, 1\n"; // sys_write
+        gen.m_output << "    mov rdi, 1\n"; // fd = stdout
+        gen.m_output << "    syscall\n";
+      }
+
       void operator()(const NodeStatementInt* stmt_int) {
         auto it = std::find_if(gen.m_vars.cbegin(), gen.m_vars.cend(), [&](const Var& var) {
         return var.name == stmt_int->ident.value.value();
       });
         if (it != gen.m_vars.cend()) {
-          std::cerr << "Undeclared identifier: " << stmt_int->ident.value.value() << "\n";
+          std::cerr << "Redeclared identifier: " << stmt_int->ident.value.value() << "\n";
           exit(EXIT_FAILURE);
         }
         
-        gen.m_vars.push_back({ .name = stmt_int->ident.value.value(), .stack_loc = gen.m_stack_size });
+        gen.m_vars.push_back({ .name = stmt_int->ident.value.value(), .stack_loc = gen.m_stack_size, .type = VarType::Int });
         gen.gen_expr(stmt_int->expr);
+      }
+
+      void operator()(const NodeStatementFloat* stmt_float) {
+        auto it = std::find_if(gen.m_vars.cbegin(), gen.m_vars.cend(), [&](const Var& var) {
+          std::cout << var.name << " " << stmt_float->ident.value.value() << "\n";
+        return var.name == stmt_float->ident.value.value();
+      });
+        if (it != gen.m_vars.cend()) {
+          std::cerr << "Redeclared identifier: " << stmt_float->ident.value.value() << "\n";
+          exit(EXIT_FAILURE);
+        }
+        
+        gen.m_vars.push_back({ .name = stmt_float->ident.value.value(), .stack_loc = gen.m_stack_size, .type = VarType::Float });
+        gen.gen_expr(stmt_float->expr);
       }
 
       void operator()(const NodeScope* scope) const {
@@ -181,6 +250,7 @@ public:
         gen.m_output << "    test rax, rax\n";
         gen.m_output << "    jz " << label << "\n";
         gen.gen_scope(stmt_if->scope);
+        
         if (stmt_if->pred.has_value()) {
             const std::string end_label = gen.create_label();
             gen.m_output << "    jmp " << end_label << "\n";
@@ -201,16 +271,14 @@ public:
 
   void gen_scope(const NodeScope* scope) {
     begin_scope();
-    for (const NodeStatement*stmt : scope->stmts) {
+    for (const NodeStatement* stmt : scope->stmts) {
       gen_stmt(stmt);
     }
     end_scope();
   }
 
   [[nodiscard]] std::string gen_prog() {
-    std::stringstream output;
-    m_output << "global _start\n_start:\n";
-
+    // First generate all statements to collect text and data
     for (const NodeStatement* stmt : m_prog.stmts) {
       gen_stmt(stmt);
     }
@@ -218,15 +286,24 @@ public:
     m_output << "    mov rax, 60\n";
     m_output << "    mov rdi, 0\n";
     m_output << "    syscall\n";
-    return m_output.str();
+
+    // Now assemble final output with data first, then text
+    std::stringstream final;
+    if (m_data_output.tellp() > 0) {
+      final << "section .data\n" << m_data_output.str();
+    }
+    final << "global _start\nsection .text\n_start:\n";
+    final << m_output.str();
+    return final.str();
   }
 
 private:
+  enum class VarType { Int, Float, String };
 
   struct Var {
     std::string name;
     size_t stack_loc;
-    // some type ?
+    VarType type;
   };
 
   void pop(const std::string& reg) {
@@ -249,18 +326,30 @@ private:
   }
 
   void end_scope() { //pop var until last begin scope
-    size_t pop_count = m_vars.size() - m_scopes.back();
-    m_output << "    add rsp, " << pop_count * 8 << "\n"; // * 8 because we only have 8 bytes integers
-    m_stack_size -= pop_count;
-    for (int i = 0; i < pop_count; i++) {
+    size_t start = m_scopes.back();
+    size_t slots = 0;
+    for (size_t i = start; i < m_vars.size(); ++i) {
+      slots += (m_vars[i].type == VarType::String) ? 2 : 1;
+    }
+    m_output << "    add rsp, " << slots * 8 << "\n";
+    m_stack_size -= slots;
+    while (m_vars.size() > start) {
       m_vars.pop_back();
     }
     m_scopes.pop_back();
   }
   const NodeProg m_prog;
   std::stringstream m_output;
+  std::stringstream m_data_output;
   std::size_t m_stack_size = 0;
   std::vector<Var> m_vars {};
   std::vector<size_t> m_scopes {};
   int m_label_count = 0;
+  int m_str_count = 0;
+
+  std::string create_str_label() {
+      std::stringstream ss;
+      ss << "str" << m_str_count++;
+      return ss.str();
+  }
 };

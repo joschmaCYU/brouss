@@ -1,44 +1,20 @@
+section .data
+    str0_len dq 4
+    str0 db "rrhh"
 global _start
+section .text
 _start:
-    mov rax, 10
-    push rax
-    ;; if
-    mov rax, 0
-    push rax
-    pop rax
-    test rax, rax
-    jz label0
-    mov rax, 1
-    push rax
-    mov rax, 60
-    pop rdi
-    syscall
-    add rsp, 0
-    jmp label1
-label0:
-    ;; elif
-    mov rax, 1
-    push rax
-    pop rax
-    test rax, rax
-    jz label2
-    mov rax, 3
-    push rax
-    mov rax, 60
-    pop rdi
-    syscall
-    add rsp, 0
-    jmp label1
-label2:
-    ;; else
     mov rax, 4
     push rax
-    mov rax, 60
-    pop rdi
+    lea rax, [rel str0]
+    push rax
+    push QWORD [rsp + 8]
+    push QWORD [rsp + 8]
+    pop rsi
+    pop rdx
+    mov rax, 1
+    mov rdi, 1
     syscall
-    add rsp, 0
-label1:
-    ;; /if
     mov rax, 5
     push rax
     mov rax, 60
