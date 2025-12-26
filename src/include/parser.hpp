@@ -86,6 +86,11 @@ struct NodeStatementFloat {
   NodeExpr* expr;
 };
 
+struct NodeStatementAssign {
+  Token ident;
+  NodeExpr* expr;
+};
+
 struct NodeStatement;
 
 struct NodeScope {
@@ -113,10 +118,15 @@ struct NodeStmtIf {
   NodeScope* scope;
   std::optional<NodeIfPred*> pred;
 };
+
+struct NodeStmtWhile {
+  NodeExpr* expr;
+  NodeScope* scope;
+};
 // I should use using instead of struct
 struct NodeStatement {
   std::variant<NodeStatementExit*, NodeStatementPrint*, NodeStatementInt*, NodeScope*, NodeStmtIf*, NodeStatementFloat*, 
-  NodeStatementString*> var;
+  NodeStatementString*, NodeStatementAssign*, NodeStmtWhile*> var;
 };
 
 struct NodeProg {
@@ -155,6 +165,7 @@ struct NodeExit {
     case TokenType::close_curly: return "close_curly";
     case TokenType::open_curly: return "open_curly";
     case TokenType::if_: return "if";
+    case TokenType::while_: return "while";
     default: return "unknown";
   }
 }
@@ -463,6 +474,40 @@ public:
       }
       stmt_if->pred = parse_if_pred();
       auto stmt = m_allocator.emplace<NodeStatement>(stmt_if);
+      return stmt;
+    } else if (auto while_ = try_consume(TokenType::while_)) {
+      try_consume(TokenType::open_paren, "Expected '('");
+      auto stmt_while = m_allocator.emplace<NodeStmtWhile>();
+      if (auto expr = parse_expr()) {
+        stmt_while->expr = expr.value();
+      } else {
+        std::cerr << "Invalid expression in while" << std::endl;
+        exit(EXIT_FAILURE);
+      }
+      try_consume(TokenType::close_paren, "Expected ')'");
+      try_consume(TokenType::semi);
+      if (auto scope = parse_scope()) {
+        stmt_while->scope = scope.value();
+      } else {
+        std::cerr << "Invalid scope in while" << std::endl;
+        exit(EXIT_FAILURE);
+      }
+      auto stmt = m_allocator.emplace<NodeStatement>(stmt_while);
+      return stmt;
+    } else if (peek().has_value() && peek().value().type == TokenType::ident
+      && peek(1).has_value() && peek(1).value().type == TokenType::eq) {
+      // x = expr
+      auto assign = m_allocator.emplace<NodeStatementAssign>();
+      assign->ident = consume();
+      consume(); // '='
+      if (auto expr = parse_expr()) {
+        assign->expr = expr.value();
+      } else {
+        std::cerr << "Invalid expression in assignment" << std::endl;
+        exit(EXIT_FAILURE);
+      }
+      try_consume(TokenType::semi, "Expected a end line or ; for assignment");
+      auto stmt = m_allocator.emplace<NodeStatement>(assign);
       return stmt;
     } else {
       return {};

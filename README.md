@@ -6,10 +6,15 @@ The compiler generates assembly, which gets assembled in an executable by nasm
 ## Example of brouss :
 ```
 // This is a comment
-int x = 1 * 3 - 6 / 2
+int x = 1 * 3 - 6 / 2 + 2
 
 string str = "Hello World!"
-print(str)
+
+while(i)
+{
+	print(str)
+	i = i - 1
+}
 
 if (x) {
   exit(20)

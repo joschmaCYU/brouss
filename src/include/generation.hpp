@@ -263,6 +263,48 @@ public:
         }
         gen.m_output << "    ;; /if\n";
       }
+
+      void operator()(const NodeStmtWhile* stmt_while) const {
+        gen.m_output << "    ;; while\n";
+        const std::string start_label = gen.create_label();
+        const std::string end_label = gen.create_label();
+        gen.m_output << start_label << ":\n";
+        gen.gen_expr(stmt_while->expr);
+        gen.pop("rax");
+        gen.m_output << "    test rax, rax\n";
+        gen.m_output << "    jz " << end_label << "\n";
+        gen.gen_scope(stmt_while->scope);
+        gen.m_output << "    jmp " << start_label << "\n";
+        gen.m_output << end_label << ":\n";
+        gen.m_output << "    ;; /while\n";
+      }
+
+      void operator()(const NodeStatementAssign* assign) {
+        auto it = std::find_if(gen.m_vars.cbegin(), gen.m_vars.cend(), [&](const Var& var) {
+          return var.name == assign->ident.value.value();
+        });
+        if (it == gen.m_vars.cend()) {
+          std::cerr << "Undeclared identifier in assignment: " << assign->ident.value.value() << "\n";
+          exit(EXIT_FAILURE);
+        }
+        gen.gen_expr(assign->expr);
+        if (it->type == VarType::String) {
+          // Expr for strings pushes [len, ptr] (ptr on top)
+          gen.pop("rax"); // ptr
+          gen.pop("rbx"); // len
+          std::stringstream off_len;
+          off_len << "QWORD [rsp + " << (gen.m_stack_size - it->stack_loc - 1) * 8 << "]";
+          std::stringstream off_ptr;
+          off_ptr << "QWORD [rsp + " << (gen.m_stack_size - (it->stack_loc + 1) - 1) * 8 << "]";
+          gen.m_output << "    mov " << off_len.str() << ", rbx\n";
+          gen.m_output << "    mov " << off_ptr.str() << ", rax\n";
+        } else {
+          gen.pop("rax");
+          std::stringstream off;
+          off << "QWORD [rsp + " << (gen.m_stack_size - it->stack_loc - 1) * 8 << "]";
+          gen.m_output << "    mov " << off.str() << ", rax\n";
+        }
+      }
     };
 
     StmtVisitor visitor{ .gen = *this };

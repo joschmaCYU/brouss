@@ -53,6 +53,7 @@ enum class TokenType {
   if_,
   elif,
   else_,
+  while_,
   // TODO add reasigment x = 1, add negative numbers, add x += 1, x < 5
   // TODO fix empty line
 };
@@ -132,6 +133,9 @@ public:
           buf.clear();
         } else if (buf == "else") {
           tokens.push_back({ .type = TokenType::else_});
+          buf.clear();
+        } else if (buf == "while") {
+          tokens.push_back({ .type = TokenType::while_});
           buf.clear();
         } else {
           tokens.push_back({.type = TokenType::ident, .value = buf});
