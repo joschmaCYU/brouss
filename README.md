@@ -41,11 +41,11 @@ echo $? (to see exit value)
 // This is a comment
 int x = 1 * 3 - 6 / 2 + 2
 
-string str = "Hello World!"
+string str = "Hello World! "
 
-while(i) {
+while(x) {
   print(str)
-  i = i - 1
+  x = x - 1
 }
 
 if (x) {
