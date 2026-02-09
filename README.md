@@ -63,7 +63,7 @@ Formal grammar (BNF-like) with simple operator precedence:
 
 $$
 \begin{aligned}
-    [\text{Prog}] &\to [\text{Stmt}]^* \\
+    [\text{Prog}] [\text{Prog}] &\to [\text{Stmt}]^* \\
     [\text{Statement}] &\to 
     \begin{cases}
         	\text{exit}([\text{Expr}]) \\
