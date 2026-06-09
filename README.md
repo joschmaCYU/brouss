@@ -18,7 +18,6 @@ The compiler reads a `.bro` source file and produces `out.asm`. You can assemble
 ## Build
 
 ```bash
-mkdir build
 cd build
 make
 ```
@@ -32,7 +31,7 @@ cd build
 ./brouss
 nasm -felf64 out.asm -o out.o
 ./out
-echo $? (to see exit value)
+echo $?
 ```
 
 ## Example
